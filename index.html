@@ -3,10 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>기도 정기적금 통장 (공유용)</title>
+<title>기도 정기적금 통장</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@400;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDWgLqUlQ30afeM1x6WgXf7NeUdRf9OO4A",
+    authDomain: "prayer-bank-926eb.firebaseapp.com",
+    projectId: "prayer-bank-926eb",
+    storageBucket: "prayer-bank-926eb.firebasestorage.app",
+    messagingSenderId: "631163527612",
+    appId: "1:631163527612:web:6c6a96af6a8a3431b58bb9"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
 <style>
 :root {
   --gd: #0d5c2e; --gm: #1a7a3e; --g2: #2a9a52; --gl: #4dc476;
@@ -26,7 +42,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(150deg,#07
 
 /* ── TAB NAV ── */
 .tab-nav{display:flex;gap:3px;margin-bottom:0;position:relative;z-index:2}
-.tab-btn{flex:1;padding:8px 3px 7px;background:rgba(255,255,255,.11);border:none;border-radius:11px 11px 0 0;color:rgba(255,255,255,.6);font-family:'Noto Sans KR',sans-serif;font-size:9.5px;font-weight:500;cursor:pointer;transition:all .2s;letter-spacing:-.5px}.tab-btn i{display:block;font-size:13px;margin-bottom:2px}
+.tab-btn{flex:1;padding:10px 4px 9px;background:rgba(255,255,255,.11);border:none;border-radius:11px 11px 0 0;color:rgba(255,255,255,.6);font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;letter-spacing:-.3px}.tab-btn i{display:block;font-size:16px;margin-bottom:3px}
 .tab-btn.active{background:var(--w);color:var(--gd);font-weight:700}
 
 /* ── PAGE CARD ── */
@@ -37,7 +53,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(150deg,#07
    COVER A — 기도정기적금 (Image 1 style)
    가로형 통장 카드 목업
 ══════════════════════════════ */
-.cover-a{background:var(--gm);overflow:hidden;position:relative;min-height:520px}
+.cover-a{background:var(--gd);overflow:hidden;position:relative;min-height:520px}
 
 /* Outer card mockup */
 .bank-card-wrap{padding:22px 20px 14px;display:flex;flex-direction:column;align-items:center;gap:18px}
@@ -88,12 +104,12 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(150deg,#07
 
 /* Stats below card */
 .ca-stats{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.ca-stat{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:12px 10px;text-align:center;backdrop-filter:blur(6px)}
+.ca-stat{background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:18px 10px;text-align:center;backdrop-filter:blur(6px)}
 .ca-stat.wide{grid-column:1/-1}
-.ca-sl{font-size:10px;color:var(--gp);font-weight:500;margin-bottom:3px;letter-spacing:.5px}
-.ca-sv{font-size:20px;font-weight:900;color:white}
-.ca-su{font-size:10px;color:var(--gl);margin-top:1px;font-weight:500}
-.ca-big{font-size:24px;font-weight:900;color:white;font-family:'Noto Serif KR',serif}
+.ca-sl{font-size:14px;color:#fff;font-weight:700;margin-bottom:6px;letter-spacing:.5px;font-family:'Noto Sans KR',sans-serif}
+.ca-sv{font-size:32px;font-weight:900;color:#fff;font-family:'Noto Sans KR',sans-serif}
+.ca-su{font-size:13px;color:rgba(255,255,255,.9);margin-top:4px;font-weight:600;font-family:'Noto Sans KR',sans-serif}
+.ca-big{font-size:34px;font-weight:900;color:#fff;font-family:'Noto Sans KR',sans-serif}
 
 /* ══════════════════════════════
    COVER B — 중보기도 통장 (blue vertical style)
@@ -384,38 +400,213 @@ table.btbl tbody td{padding:9px 7px;text-align:center;color:var(--td)}
 .bem-save{width:100%;padding:13px;background:linear-gradient(135deg,#7c50b8,#5b2d8e);color:white;border:none;border-radius:10px;font-family:'Noto Sans KR',sans-serif;font-size:15px;font-weight:900;cursor:pointer;letter-spacing:-.3px}
 .bem-save:hover{opacity:.92}
 
-/* ══ 은혜 나눔 탭 ══ */
-.share-hdr{background:linear-gradient(135deg,#6a3d9a,#4a235a);padding:18px 18px 14px;color:white;text-align:center}
-.share-hdr h2{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:900;letter-spacing:-.5px}
-.share-hdr p{font-size:12px;color:#d4b8ff;margin-top:4px}
-.share-body{padding:16px 15px;display:flex;flex-direction:column;gap:14px}
+/* ── LOGIN SCREEN ── */
+#login-screen{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background: radial-gradient(ellipse at 20% 50%, #0f5c34 0%, #0a2e18 40%, #061a0e 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;z-index:9999;padding:20px;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+}
+#login-screen::before{
+  content:'';position:absolute;inset:0;
+  background: radial-gradient(ellipse at 80% 20%, rgba(34,197,94,0.08) 0%, transparent 60%),
+              radial-gradient(ellipse at 10% 80%, rgba(16,185,129,0.06) 0%, transparent 50%);
+  pointer-events:none;
+}
+#login-screen::after{
+  content:'';position:absolute;inset:0;
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 80px, rgba(255,255,255,0.01) 80px, rgba(255,255,255,0.01) 81px),
+                    repeating-linear-gradient(90deg, transparent, transparent 80px, rgba(255,255,255,0.01) 80px, rgba(255,255,255,0.01) 81px);
+  pointer-events:none;
+}
+.login-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.login-particles span{
+  position:absolute;width:2px;height:2px;background:rgba(134,239,172,0.4);border-radius:50%;
+  animation:float-up 8s infinite linear;
+}
+@keyframes float-up{
+  0%{transform:translateY(100vh) scale(0);opacity:0}
+  10%{opacity:1}
+  90%{opacity:.3}
+  100%{transform:translateY(-20px) scale(1.5);opacity:0}
+}
+.login-box{
+  position:relative;z-index:1;
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border:1px solid rgba(134,239,172,0.15);
+  border-radius:28px;
+  padding:44px 36px 36px;
+  max-width:400px;width:100%;
+  margin:auto 0;
+  box-shadow: 0 40px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(134,239,172,0.05), inset 0 1px 0 rgba(255,255,255,0.08);
+  text-align:center;
+  animation: login-appear 0.6s cubic-bezier(0.16,1,0.3,1) both;
+  flex-shrink:0;
+}
+@keyframes login-appear{
+  from{opacity:0;transform:translateY(30px) scale(0.96)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+.login-cross{
+  width:64px;height:64px;margin:0 auto 20px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border-radius:18px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;
+  box-shadow: 0 8px 32px rgba(34,197,94,0.35), 0 0 0 1px rgba(134,239,172,0.2);
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+@keyframes pulse-glow{
+  0%,100%{box-shadow:0 8px 32px rgba(34,197,94,0.35),0 0 0 1px rgba(134,239,172,0.2)}
+  50%{box-shadow:0 8px 48px rgba(34,197,94,0.55),0 0 0 1px rgba(134,239,172,0.35)}
+}
+.login-box h2{
+  font-family:'Noto Serif KR',serif;font-size:28px;font-weight:900;
+  color:#fff;margin-bottom:6px;letter-spacing:-0.5px;
+  text-shadow:0 2px 20px rgba(34,197,94,0.3);
+}
+.login-box .login-subtitle{font-size:13px;color:rgba(134,239,172,0.7);margin-bottom:28px;letter-spacing:0.3px}
+.login-google-btn{
+  width:100%;padding:15px;
+  background:rgba(255,255,255,0.95);
+  color:#1a1a1a;border:none;border-radius:14px;
+  font-family:'Noto Sans KR',sans-serif;font-size:15px;font-weight:700;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;
+  margin-bottom:20px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.3);
+  transition:all 0.2s ease;
+}
+.login-google-btn:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(0,0,0,0.4)}
+.login-divider{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:rgba(134,239,172,0.15)}
+.login-divider span{font-size:12px;color:rgba(255,255,255,0.35);white-space:nowrap}
+.login-tabs{display:flex;margin-bottom:18px;background:rgba(0,0,0,0.3);border-radius:12px;padding:4px;gap:4px}
+.login-tab{
+  flex:1;padding:10px;border:none;border-radius:9px;
+  font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;
+  cursor:pointer;transition:all 0.2s ease;color:rgba(255,255,255,0.5);background:transparent;
+}
+.login-tab.active{background:linear-gradient(135deg,#22c55e,#16a34a);color:white;box-shadow:0 4px 12px rgba(34,197,94,0.4)}
+.login-input{
+  width:100%;padding:14px 16px;
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(134,239,172,0.2);
+  border-radius:12px;
+  font-family:'Noto Sans KR',sans-serif;font-size:14px;
+  color:white;margin-bottom:12px;outline:none;box-sizing:border-box;
+  transition:border-color 0.2s;
+}
+.login-input::placeholder{color:rgba(255,255,255,0.35)}
+.login-input:focus{border-color:rgba(134,239,172,0.5);background:rgba(255,255,255,0.1)}
+.login-btn{
+  width:100%;padding:15px;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  color:white;border:none;border-radius:12px;
+  font-family:'Noto Sans KR',sans-serif;font-size:15px;font-weight:900;
+  cursor:pointer;margin-top:4px;
+  box-shadow:0 4px 20px rgba(34,197,94,0.4);
+  transition:all 0.2s ease;letter-spacing:-.3px;
+}
+.login-btn:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(34,197,94,0.5)}
+.login-new-btn{
+  width:100%;padding:14px;margin-top:10px;
+  background: rgba(34,197,94,0.1);
+  border:1.5px solid rgba(134,239,172,0.3);
+  border-radius:12px;color:rgba(134,239,172,0.9);
+  font-family:'Noto Sans KR',sans-serif;font-size:14px;font-weight:700;
+  cursor:pointer;transition:all 0.2s ease;
+}
+.login-new-btn:hover{background:rgba(34,197,94,0.18);border-color:rgba(134,239,172,0.5)}
+.login-code-display{
+  margin-top:14px;padding:16px;
+  background:rgba(34,197,94,0.12);
+  border:1px solid rgba(134,239,172,0.25);
+  border-radius:14px;text-align:center;
+  animation:login-appear 0.4s ease both;
+}
+.login-code-display .code-label{font-size:11px;color:rgba(134,239,172,0.7);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase}
+.login-code-display .code-number{font-size:30px;font-weight:900;color:#86efac;letter-spacing:10px}
+.login-code-display .code-hint{font-size:11px;color:rgba(255,255,255,0.4);margin-top:8px}
+.login-error{color:#fca5a5;font-size:12px;margin-top:10px;display:none;background:rgba(239,68,68,0.1);padding:8px 12px;border-radius:8px;border:1px solid rgba(239,68,68,0.2)}
+.login-loading{display:none;color:rgba(134,239,172,0.8);font-size:13px;margin-top:10px}
+.sync-status{position:fixed;top:10px;right:10px;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700;z-index:9998;display:none}
+.sync-status.saving{display:block;background:#fff3cd;color:#856404}
+.sync-status.saved{display:block;background:#d4edda;color:#155724}
+.sync-status.error{display:block;background:#f8d7da;color:#721c24}
+.logout-btn{position:fixed;top:10px;left:10px;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700;z-index:9998;background:rgba(255,255,255,.15);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.2);cursor:pointer;font-family:'Noto Sans KR',sans-serif}
+.logout-btn:hover{background:rgba(255,255,255,.25)}
 
-/* 날짜 선택 */
-.share-date-row{display:flex;align-items:center;gap:10px;background:#f9f4ff;border:1.5px solid #d4b8ff;border-radius:12px;padding:12px 14px}
-.share-date-label{font-size:12px;font-weight:700;color:#6a3d9a;white-space:nowrap}
-.share-date-input{flex:1;border:none;background:transparent;font-family:'Noto Sans KR',sans-serif;font-size:14px;color:#333;outline:none}
-
-/* 체크 항목 */
-.share-checks{display:flex;flex-direction:column;gap:8px}
-.share-check-item{display:flex;align-items:flex-start;gap:10px;background:white;border:2px solid #c9a8ff;border-radius:12px;padding:12px 14px;cursor:pointer;transition:all .15s}
-.share-check-item.checked{background:#f3ecff;border-color:#9c6dce}
-.share-check-item input[type=checkbox]{width:18px;height:18px;accent-color:#6a3d9a;margin-top:1px;flex-shrink:0;cursor:pointer}
-.sci-content{flex:1}
-.sci-title{font-size:13px;font-weight:700;color:#2d0a3a}
-.sci-preview{font-size:11px;color:#888;margin-top:3px;line-height:1.5}
-.sci-empty{font-size:11px;color:#bbb;font-style:italic;margin-top:3px}
-
-/* 미리보기 */
-.share-preview{background:#fdfaff;border:1.5px dashed #c4a0e8;border-radius:12px;padding:14px;font-size:12px;color:#333;line-height:1.9;white-space:pre-wrap;min-height:80px;font-family:'Noto Sans KR',sans-serif}
-.share-preview-empty{color:#bbb;text-align:center;padding:20px 0;font-style:italic}
-
-/* 복사 버튼 */
-.share-copy-btn{width:100%;padding:15px;background:linear-gradient(135deg,#6a3d9a,#4a235a);color:white;border:none;border-radius:12px;font-family:'Noto Sans KR',sans-serif;font-size:16px;font-weight:900;cursor:pointer;letter-spacing:-.3px;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 15px rgba(106,61,154,.35)}
-.share-copy-btn:active{transform:scale(.97)}
-.share-copy-btn.copied{background:linear-gradient(135deg,#2a9a52,#0d5c2e)}
 </style>
 </head>
 <body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-particles">
+    <span style="left:10%;animation-delay:0s;animation-duration:9s"></span>
+    <span style="left:25%;animation-delay:2s;animation-duration:7s"></span>
+    <span style="left:40%;animation-delay:4s;animation-duration:11s"></span>
+    <span style="left:55%;animation-delay:1s;animation-duration:8s"></span>
+    <span style="left:70%;animation-delay:3s;animation-duration:10s"></span>
+    <span style="left:85%;animation-delay:5s;animation-duration:6s"></span>
+  </div>
+  <div class="login-box">
+    <h2 style="font-size:36px;margin-bottom:10px">기도통장</h2>
+    <p class="login-subtitle" style="font-size:12px;line-height:1.6;color:rgba(134,239,172,0.8)">실제 통장이 아닌, 기도시간을<br>"영적 자산"으로 기록하는 상징적인 계좌번호입니다</p>
+
+    <!-- 방식 A: 구글 로그인 -->
+    <button class="login-google-btn" onclick="doGoogleLogin()">
+      <img src="https://www.google.com/favicon.ico" style="width:18px;height:18px">
+      G 구글 계정으로 시작하기
+    </button>
+
+    <div class="login-divider"><span style="font-size:14px;font-weight:700;color:rgba(255,255,255,0.8);letter-spacing:2px">── 또는 ──</span></div>
+
+    <!-- 처음이신가요 안내 - 항상 보임 -->
+    <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(134,239,172,0.2);border-radius:12px;padding:14px;margin-bottom:14px;text-align:left">
+      <div style="font-size:12px;color:rgba(134,239,172,0.9);font-weight:700;margin-bottom:6px">🌱 처음이신가요?</div>
+      <div style="font-size:14px;color:rgba(255,255,255,0.85);margin-bottom:12px;font-weight:600;line-height:1.6">아래 2가지 방법 중<br>편하신 방법을 선택해서 만드세요</div>
+      <button class="login-new-btn" onclick="genNewCode()">✨ 새 통장 만들기 (코드 자동 발급)</button>
+    </div>
+
+    <!-- 새 코드 발급 결과 -->
+    <div id="new-code-display" style="display:none" class="login-code-display">
+      <div class="code-label">📌 내 코드번호 — 꼭 메모하세요!</div>
+      <div class="code-number" id="new-code-number"></div>
+      <div class="code-hint">이 번호로 언제든지 로그인할 수 있어요</div>
+    </div>
+
+    <div class="login-divider" style="margin-top:16px"><span style="font-size:14px;font-weight:700;color:rgba(255,255,255,0.85);letter-spacing:1px">이미 코드가 있으신가요?</span></div>
+
+    <!-- 탭 -->
+    <div class="login-tabs">
+      <button class="login-tab active" id="tab-b" onclick="switchTab('b')">🔑 이름+비밀번호</button>
+      <button class="login-tab" id="tab-c" onclick="switchTab('c')">🔢 숫자코드 6자리</button>
+    </div>
+
+    <!-- 방식 B -->
+    <div id="form-b">
+      <input type="text" class="login-input" id="login-name" placeholder="이름 (예: 룻)" autocomplete="off">
+      <input type="password" class="login-input" id="login-pw" placeholder="비밀번호 (4자리 이상)">
+      <button class="login-btn" onclick="doLogin()">🔑 로그인 / 새 통장 만들기</button>
+    </div>
+
+    <!-- 방식 C -->
+    <div id="form-c" style="display:none">
+      <input type="text" class="login-input" id="login-code" placeholder="숫자  6 자리  코드  입력" maxlength="6" style="text-align:center;font-size:20px;letter-spacing:6px">
+      <button class="login-btn" onclick="doCodeLogin()">▶ 입장하기</button>
+    </div>
+
+    <div class="login-error" id="login-error"></div>
+    <div class="login-loading" id="login-loading">⏳ 데이터 불러오는 중...</div>
+  </div>
+</div>
+
+<!-- SYNC STATUS -->
+<div class="sync-status" id="sync-status"></div>
+<button class="logout-btn" id="logout-btn" style="display:none" onclick="doLogout()">🔓 로그아웃</button>
 
 <!-- MODAL -->
 <div class="modal-ov" id="editModal">
@@ -430,7 +621,7 @@ table.btbl tbody td{padding:9px 7px;text-align:center;color:var(--td)}
       <div><label>만기목표</label><input type="text" id="m_goal" placeholder="영적 자산 2억 (총 20,000분 기도)"></div>
       <div><label>월납입액 설명</label><input type="text" id="m_monthly" placeholder="일 평균 55분 이상 기도 권장"></div>
       <div><label>1분당 환산 금액 (₩)</label><input type="number" id="m_rate" placeholder="12000"></div>
-
+      <div><label>1분당 CAD 환산 금액</label><input type="number" id="m_cad" placeholder="12" step="0.01"></div>
     </div>
     <div class="m-acts">
       <button class="m-cancel" onclick="closeModal()">취소</button>
@@ -439,7 +630,7 @@ table.btbl tbody td{padding:9px 7px;text-align:center;color:var(--td)}
   </div>
 </div>
 
-<div class="booklet">
+<div class="booklet" id="main-booklet" style="display:none">
 
   <!-- COVER TYPE SWITCHER -->
   <div class="cover-switcher">
@@ -455,7 +646,7 @@ table.btbl tbody td{padding:9px 7px;text-align:center;color:var(--td)}
     <button class="tab-btn" onclick="showTab('tx')" id="tab-tx"><i class="fa fa-list-alt"></i>거래내역</button>
     <button class="tab-btn" onclick="showTab('bible')" id="tab-bible"><i class="fa fa-bible"></i>성경읽기</button>
     <button class="tab-btn" onclick="showTab('victory')" id="tab-victory"><i class="fa fa-trophy"></i>오늘승리</button>
-    <button class="tab-btn" onclick="showTab('share')" id="tab-share"><i class="fa fa-star"></i>은혜나눔</button>
+
   </div>
 
   <!-- ═══ PAGE: COVER ═══ -->
@@ -514,12 +705,21 @@ table.btbl tbody td{padding:9px 7px;text-align:center;color:var(--td)}
             <div class="ca-su">일째</div>
           </div>
           <div class="ca-stat wide">
-            <div class="ca-sl">✨ 영적 자산 (₩ 환산)</div>
+            <div class="ca-sl" style="color:#fff">✨ 영적 자산 (₩ 환산)</div>
             <div class="ca-big" id="ca-krw">₩ 0</div>
-
+            <div class="ca-su" id="ca-cad">≈ CAD $0</div>
           </div>
         </div>
 
+        <!-- 실제 은행 아님 안내 -->
+        <div style="background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.22);border-radius:14px;padding:20px;margin-top:12px;margin-bottom:8px;text-align:center;width:100%;box-sizing:border-box">
+          <div style="font-size:16px;color:#fff;line-height:2.0;font-weight:700;font-family:'Noto Sans KR',sans-serif">
+            이 통장은 <strong style="color:#fff;font-size:17px">실제 은행 통장이 아닙니다.</strong><br>
+            매일 기도한 시간을 <strong style="color:#fff;font-size:17px">"영적 자산"</strong>으로 기록하는<br>
+            기도 일기장입니다.<br>
+            <span style="color:#fff;font-size:14px;font-family:'Noto Sans KR',sans-serif">계좌번호는 상징적인 번호이니 안심하세요 🙏</span>
+          </div>
+        </div>
         <!-- 이름 빠른 수정 -->
         <button onclick="openModal()" style="width:100%;padding:9px;background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);border-radius:10px;color:rgba(255,255,255,.85);font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:600;cursor:pointer;margin-top:2px">
           ✏️ 이름 · 계좌번호 · 목표 수정하기
@@ -564,7 +764,7 @@ table.btbl tbody td{padding:9px 7px;text-align:center;color:var(--td)}
           <div class="cb-scard wide">
             <div class="cb-ssl">✨ 영적 자산</div>
             <div class="cb-big" id="cb-krw2">₩ 0</div>
-
+            <div class="cb-ssu" id="cb-cad2">≈ CAD $0</div>
           </div>
         </div>
 
@@ -592,7 +792,6 @@ table.btbl tbody td{padding:9px 7px;text-align:center;color:var(--td)}
       <div class="info-sub" style="background:#e8f5ee;color:#0d5c2e;font-size:13px;font-weight:700;padding:8px;text-align:center;letter-spacing:2px;border-bottom:2px solid #a8e6bc">통장 개설 및 계약 내용</div>
 
       <div class="info-body">
-        <div class="info-section-lbl">ACCOUNT INFORMATION · 계약 내역</div>
         <table class="info-tbl">
           <tbody>
             <tr>
@@ -609,15 +808,22 @@ table.btbl tbody td{padding:9px 7px;text-align:center;color:var(--td)}
             </tr>
             <tr>
               <td>[계약기간]</td>
-              <td id="inf-period">1년 (2026.01.29 ~ 2027.01.29)</td>
+              <td id="inf-period" style="color:#888;font-size:12px">(기도) 자유롭게 설정하세요</td>
             </tr>
             <tr>
               <td>[만기목표]</td>
-              <td id="inf-goal">영적 자산 2억 (총 20,000분 기도)</td>
+              <td id="inf-goal" style="color:#888;font-size:12px">자유롭게 설정하세요</td>
             </tr>
             <tr>
               <td>[월납입액]</td>
-              <td id="inf-monthly">일 평균 55분 이상 기도 권장</td>
+              <td id="inf-monthly" style="color:#888;font-size:12px">자유롭게 설정하세요</td>
+            </tr>
+            <tr>
+              <td colspan="2" style="padding:10px 0 4px">
+                <div style="background:#f0faf4;border:1.5px solid #a8e6bc;border-radius:10px;padding:10px 14px;font-size:13px;color:#0d5c2e;font-weight:700;text-align:center">
+                  💰 기도 시간 환산 : 기도 1분 = ₩12,000 적용
+                </div>
+              </td>
             </tr>
             <tr>
               <td>[현재잔액]</td>
@@ -641,6 +847,7 @@ table.btbl tbody td{padding:9px 7px;text-align:center;color:var(--td)}
           <input type="file" accept=".json" onchange="importData(event)" style="display:none">
         </label>
       </div>
+      <div style="height:20px"></div>
     </div>
   </div>
 
@@ -676,7 +883,6 @@ table.btbl tbody td{padding:9px 7px;text-align:center;color:var(--td)}
         <input type="text" id="cb-content2" placeholder="두 번째 중보기도 내용">
       </div>
     </div>
-
     <div class="inp-form">
       <div class="frow">
         <div class="fg">
@@ -711,7 +917,7 @@ table.btbl tbody td{padding:9px 7px;text-align:center;color:var(--td)}
         <div class="pl">💰 기도 시간 환산 기준</div>
         <div class="preview-vals">
           <span class="pv-krw" style="font-size:13px;color:#2a9a52;font-weight:700">기도 1분 = ₩12,000 적용</span>
-
+          <span class="pv-cad" style="font-size:12px;color:#1a5c99;font-weight:600">= CAD $12 적용</span>
         </div>
         <div style="font-size:11px;color:#888;margin-top:5px" id="prev-live"></div>
       </div>
@@ -798,7 +1004,10 @@ table.btbl tbody td{padding:9px 7px;text-align:center;color:var(--td)}
         <div class="tf-label">이 달<br>금 액 (₩)</div>
         <div class="tf-val" id="tf-mo-krw">₩ 0</div>
       </div>
-
+      <div class="tx-foot-row">
+        <div class="tf-label">이 달<br>금 액 (CAD)</div>
+        <div class="tf-val" id="tf-mo-cad">CAD $0.00</div>
+      </div>
     </div>
 
     <!-- 전체 누적 총계 -->
@@ -808,7 +1017,10 @@ table.btbl tbody td{padding:9px 7px;text-align:center;color:var(--td)}
         <span style="font-size:11px;color:#666">원화 총액</span>
         <span class="tg-val" id="tg-krw">₩ 0</span>
       </div>
-
+      <div class="tg-row" style="margin-top:3px">
+        <span style="font-size:11px;color:#666">CAD 환산</span>
+        <span class="tg-cad" id="tg-cad">CAD $0.00</span>
+      </div>
       <div class="tg-row" style="margin-top:3px">
         <span style="font-size:11px;color:#666">총 기도시간</span>
         <span style="font-size:13px;font-weight:700;color:var(--g2)" id="tg-min">0 분</span>
@@ -997,67 +1209,6 @@ table.btbl tbody td{padding:9px 7px;text-align:center;color:var(--td)}
   </div>
 
 
-  <!-- ═══ PAGE: SHARE (은혜 나눔) ═══ -->
-  <div class="page-card" id="page-share">
-    <div class="share-hdr">
-      <h2>✨ 은혜 나눔</h2>
-      <p>오늘의 은혜를 선택해서 카톡에 나눠요 💜</p>
-    </div>
-    <div class="share-body">
-
-      <!-- 날짜 선택 -->
-      <div class="share-date-row">
-        <span class="share-date-label">📅 날짜 선택</span>
-        <input type="date" id="sh-date" class="share-date-input" onchange="updateShareItems()">
-      </div>
-
-      <!-- 체크 항목들 -->
-      <div class="share-checks" id="sh-checks">
-
-        <!-- 성경 나눔 -->
-        <label class="share-check-item" id="sh-item-bible">
-          <input type="checkbox" id="sh-cb-bible" onchange="toggleShareItem('bible')">
-          <div class="sci-content">
-            <div class="sci-title">📖 성경 읽기 &amp; 묵상 나눔</div>
-            <div id="sh-preview-bible" class="sci-empty">해당 날짜의 기록을 불러옵니다...</div>
-          </div>
-        </label>
-
-        <!-- 오늘도 승리 -->
-        <label class="share-check-item" id="sh-item-victory">
-          <input type="checkbox" id="sh-cb-victory" onchange="toggleShareItem('victory')">
-          <div class="sci-content">
-            <div class="sci-title">🏆 오늘도 승리</div>
-            <div id="sh-preview-victory" class="sci-empty">해당 날짜의 기록을 불러옵니다...</div>
-          </div>
-        </label>
-
-        <!-- 기도시간 -->
-        <label class="share-check-item" id="sh-item-prayer">
-          <input type="checkbox" id="sh-cb-prayer" onchange="toggleShareItem('prayer')">
-          <div class="sci-content">
-            <div class="sci-title">🙏 기도 시간</div>
-            <div id="sh-preview-prayer" class="sci-empty">해당 날짜의 기록을 불러옵니다...</div>
-          </div>
-        </label>
-
-      </div>
-
-      <!-- 미리보기 -->
-      <div>
-        <div style="font-size:11px;font-weight:700;color:#6a3d9a;margin-bottom:6px;letter-spacing:.3px">📋 복사될 내용 미리보기</div>
-        <div class="share-preview" id="sh-preview-box">
-          <span class="share-preview-empty">날짜를 선택하고 나눌 항목을 체크하세요 😊</span>
-        </div>
-      </div>
-
-      <!-- 복사 버튼 -->
-      <button class="share-copy-btn" id="sh-copy-btn" onclick="copyShareText()">
-        <i class="fa fa-copy"></i> 복사해서 카톡에 붙여넣기
-      </button>
-
-    </div>
-  </div>
 
 </div><!-- /booklet -->
 
@@ -1066,33 +1217,283 @@ table.btbl tbody td{padding:9px 7px;text-align:center;color:var(--td)}
 
 <script>
 /* ─── STATE ─── */
-let S = {
-  name:'홍 길 동', acct:'000-0000-0000',
+/* 기본 데이터: JSON 백업에서 직접 내장 → 어떤 기기에서든 바로 보임 */
+const DEFAULT_DATA = {
+  name:'', acct:'000-0000-0000',
   product:'기도 정기적금 (매일 기도)',
-  startDate:'2026-01-29', endDate:'2027-01-29',
-  goal:'영적 자산 2억 (총 20,000분 기도)',
-  monthly:'일 평균 55분 이상 기도 권장',
-  rateKRW:12000,
+  startDate:'', endDate:'',
+  goal:'자유롭게 설정하세요',
+  monthly:'자유롭게 설정하세요',
+  rateKRW:12000, rateCAD:12,
   coverType:'a',
   acctType:'a',
   records:[],
   cbRecords:[],
-  muksung:[]
+  bibleRecords:[],
+  muksung:[],
+  victories:[]
 };
 
-function load(){try{const d=localStorage.getItem('gido-community-v3');if(d)S=JSON.parse(d)}catch(e){}}
-function save(){try{localStorage.setItem('gido-community-v3',JSON.stringify(S))}catch(e){}}
+let S = JSON.parse(JSON.stringify(DEFAULT_DATA));
+
+/* ─── Firebase 사용자 ID ─── */
+let currentUserId = null;
+let saveTimer = null;
+
+/* ─── 탭 전환 ─── */
+function switchTab(t){
+  document.getElementById('form-b').style.display = t==='b'?'block':'none';
+  document.getElementById('form-c').style.display = t==='c'?'block':'none';
+  document.getElementById('tab-b').className = 'login-tab' + (t==='b'?' active':'');
+  document.getElementById('tab-c').className = 'login-tab' + (t==='c'?' active':'');
+}
+
+/* ─── 방식 A: 구글 로그인 ─── */
+async function doGoogleLogin(){
+  const errEl  = document.getElementById('login-error');
+  const loadEl = document.getElementById('login-loading');
+  errEl.style.display='none';
+  loadEl.style.display='block';
+  const provider = new firebase.auth.GoogleAuthProvider();
+  try{
+    // 1차: popup 시도
+    const result = await firebase.auth().signInWithPopup(provider);
+    await handleGoogleUser(result.user);
+  }catch(popupErr){
+    // popup 차단 또는 환경 미지원 시 redirect로 전환
+    if(popupErr.code==='auth/popup-blocked' || popupErr.code==='auth/operation-not-supported-in-this-environment'){
+      try{
+        await firebase.auth().signInWithRedirect(provider);
+      }catch(redirErr){
+        loadEl.style.display='none';
+        errEl.textContent='구글 로그인 오류: '+redirErr.message;
+        errEl.style.display='block';
+      }
+    } else {
+      loadEl.style.display='none';
+      errEl.textContent='구글 로그인 오류: '+popupErr.message;
+      errEl.style.display='block';
+    }
+  }
+}
+
+/* ─── 구글 로그인 성공 후 사용자 처리 ─── */
+async function handleGoogleUser(user){
+  const errEl  = document.getElementById('login-error');
+  const loadEl = document.getElementById('login-loading');
+  try{
+    currentUserId = 'google_' + user.uid;
+    const doc = await db.collection('users').doc(currentUserId).get();
+    if(doc.exists){
+      S = JSON.parse(doc.data().payload);
+    } else {
+      S = JSON.parse(JSON.stringify(DEFAULT_DATA));
+      S.name = user.displayName || user.email.split('@')[0];
+      await db.collection('users').doc(currentUserId).set({
+        _name: S.name,
+        payload: JSON.stringify(S),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+    loginSuccess();
+  }catch(err){
+    if(loadEl) loadEl.style.display='none';
+    if(errEl){
+      errEl.textContent='구글 로그인 오류: '+err.message;
+      errEl.style.display='block';
+    }
+  }
+}
+
+/* ─── 구글 리다이렉트 결과 처리 (redirect 전환 시 사용) ─── */
+async function handleGoogleRedirectResult(){
+  try{
+    const result = await firebase.auth().getRedirectResult();
+    if(result && result.user){
+      await handleGoogleUser(result.user);
+    }
+  }catch(err){
+    const errEl = document.getElementById('login-error');
+    if(errEl){
+      errEl.textContent='구글 로그인 오류: '+err.message;
+      errEl.style.display='block';
+    }
+    console.error('Google redirect error:', err);
+  }
+}
+// 페이지 로드 시 리다이렉트 결과 확인
+handleGoogleRedirectResult();
+
+/* ─── 방식 C: 숫자 코드 ─── */
+function genNewCode(){
+  const code = String(Math.floor(100000+Math.random()*900000));
+  document.getElementById('new-code-display').style.display='block';
+  document.getElementById('new-code-number').textContent = code;
+  document.getElementById('login-code').value = code;
+}
+
+async function doCodeLogin(){
+  const code = document.getElementById('login-code').value.trim();
+  const errEl  = document.getElementById('login-error');
+  const loadEl = document.getElementById('login-loading');
+  errEl.style.display='none';
+  if(!code||code.length!==6||isNaN(code)){
+    errEl.textContent='숫자 6자리를 입력하세요';
+    errEl.style.display='block'; return;
+  }
+  loadEl.style.display='block';
+  currentUserId = 'code_' + code;
+  try{
+    const doc = await db.collection('users').doc(currentUserId).get();
+    if(doc.exists){
+      S = JSON.parse(doc.data().payload);
+    } else {
+      S = JSON.parse(JSON.stringify(DEFAULT_DATA));
+      await db.collection('users').doc(currentUserId).set({
+        _code: code,
+        payload: JSON.stringify(S),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+    // localStorage.setItem('gido-login-shared', JSON.stringify({type:'code', code}));
+    loginSuccess();
+    // 이름이 없으면 수정 안내
+    if(!S.name || S.name==='룻'){
+      setTimeout(()=>toast('👋 환영합니다! 통장정보에서 이름을 설정해 주세요 😊'), 1200);
+    }
+  }catch(err){
+    loadEl.style.display='none';
+    errEl.textContent='연결 오류: '+err.message;
+    errEl.style.display='block';
+    currentUserId=null;
+  }
+}
+
+/* ─── 로그인 성공 공통 처리 ─── */
+function loginSuccess(){
+  document.getElementById('login-loading').style.display='none';
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('main-booklet').style.display='';
+  document.getElementById('logout-btn').style.display='block';
+  renderAll(); renderTx(); renderBible(); renderMuksung(); renderVictory();
+  setAcctType(S.acctType||'a');
+  if((S.acctType||'a')==='b') renderCbInline();
+  showSyncStatus('saved','☁️ 동기화 완료');
+}
+
+/* ─── 로그인 (방식 B: 이름+비밀번호) ─── */
+async function doLogin(){
+  const name = document.getElementById('login-name').value.trim();
+  const pw   = document.getElementById('login-pw').value.trim();
+  const errEl  = document.getElementById('login-error');
+  const loadEl = document.getElementById('login-loading');
+  errEl.style.display='none';
+
+  if(!name){ errEl.textContent='이름을 입력하세요'; errEl.style.display='block'; return; }
+  if(!pw || pw.length<4){ errEl.textContent='비밀번호 4자리 이상 입력하세요'; errEl.style.display='block'; return; }
+
+  // 사용자 ID = name_pw 해시 (간단 조합)
+  currentUserId = name + '_' + simpleHash(pw);
+  loadEl.style.display='block';
+
+  try{
+    // Firestore에서 데이터 불러오기
+    const doc = await db.collection('users').doc(currentUserId).get();
+    if(doc.exists){
+      const data = doc.data();
+      // 비밀번호 확인
+      if(data._pw !== pw){
+        errEl.textContent='비밀번호가 틀립니다'; errEl.style.display='block';
+        loadEl.style.display='none'; currentUserId=null; return;
+      }
+      // 데이터 복원
+      S = JSON.parse(data.payload);
+    } else {
+      // 새 사용자 → DEFAULT_DATA로 시작
+      S = JSON.parse(JSON.stringify(DEFAULT_DATA));
+      S.name = name;
+      // Firestore에 최초 저장
+      await db.collection('users').doc(currentUserId).set({
+        _pw: pw,
+        _name: name,
+        payload: JSON.stringify(S),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+
+    // 로그인 성공
+    // localStorage.setItem('gido-login-shared', JSON.stringify({type:'name', name, pw}));
+    loginSuccess();
+  }catch(err){
+    loadEl.style.display='none';
+    errEl.textContent='연결 오류: '+err.message; errEl.style.display='block';
+    currentUserId=null;
+  }
+}
+
+function doLogout(){
+  if(!confirm('로그아웃 하시겠습니까?')) return;
+  currentUserId = null;
+  // localStorage.removeItem('gido-login-shared');
+  firebase.auth().signOut().catch(()=>{});
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('main-booklet').style.display='none';
+  document.getElementById('logout-btn').style.display='none';
+  document.getElementById('login-name').value='';
+  document.getElementById('login-pw').value='';
+  document.getElementById('login-code').value='';
+  S = JSON.parse(JSON.stringify(DEFAULT_DATA));
+}
+
+function simpleHash(str){
+  let h=0;
+  for(let i=0;i<str.length;i++){ h=((h<<5)-h)+str.charCodeAt(i); h|=0; }
+  return Math.abs(h).toString(36);
+}
+
+function showSyncStatus(type, msg){
+  const el = document.getElementById('sync-status');
+  el.className='sync-status '+type; el.textContent=msg;
+  if(type==='saved') setTimeout(()=>{ el.style.display='none'; },2000);
+}
+
+/* ─── load / save (Firestore) ─── */
+function load(){
+  // 항상 로그인 화면 보여주기
+  document.getElementById("login-screen").style.display="flex";
+  document.getElementById("main-booklet").style.display="none";
+  // 자동 로그인 없음 - 사용자가 직접 로그인해야 함
+}
+
+function save(){
+  // Firestore 저장 (로그인 상태일 때만, 디바운스)
+  if(!currentUserId) return;
+  if(saveTimer) clearTimeout(saveTimer);
+  showSyncStatus('saving','☁️ 저장 중...');
+  saveTimer = setTimeout(async()=>{
+    try{
+      await db.collection('users').doc(currentUserId).update({
+        payload: JSON.stringify(S),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      showSyncStatus('saved','☁️ 동기화 완료');
+    }catch(err){
+      showSyncStatus('error','⚠️ 저장 실패');
+      console.error('Firestore save error:', err);
+    }
+  }, 1500);
+}
 
 /* ─── TABS ─── */
 function showTab(t){
-  ['cover','info','input','tx','bible','victory','share'].forEach(x=>{
+  ['cover','info','input','tx','bible','victory'].forEach(x=>{
     document.getElementById('page-'+x).classList.toggle('active',x===t);
     document.getElementById('tab-'+x).classList.toggle('active',x===t);
   });
   if(t==='tx') renderTx();
   if(t==='bible') renderBible();
   if(t==='victory') renderVictory();
-  if(t==='share') initShare();
+
 }
 
 /* ─── COVER TYPE ─── */
@@ -1128,7 +1529,7 @@ function cad(n){return 'CAD $'+n.toFixed(2)}
 /* ─── TOTALS ─── */
 function totals(){
   let m=0; S.records.forEach(r=>m+=Number(r.min));
-  return{m, k:m*S.rateKRW};
+  return{m, k:m*S.rateKRW, c:m*S.rateCAD};
 }
 
 /* ─── RENDER ALL ─── */
@@ -1141,19 +1542,20 @@ function renderAll(){
   document.getElementById('ca-min').textContent=m.toLocaleString();
   document.getElementById('ca-days').textContent=days.toLocaleString();
   document.getElementById('ca-krw').textContent=krw(k);
-
+  document.getElementById('ca-cad').textContent='≈ '+cad(c);
 
   // Cover B (중보기도 - 별도 기록)
   const cbRecs = S.cbRecords||[];
   const cbMin  = cbRecs.reduce((s,r)=>s+Number(r.min),0);
   const cbKRW  = cbMin*S.rateKRW;
+  const cbCAD  = cbMin*S.rateCAD;
   document.getElementById('cb-acct').textContent=S.acct;
   document.getElementById('cb-name').textContent=S.name;
   document.getElementById('cb-product').textContent='중보기도통장';
   document.getElementById('cb-min2').textContent=cbMin.toLocaleString();
   document.getElementById('cb-days2').textContent=cbRecs.length.toLocaleString();
   document.getElementById('cb-krw2').textContent=krw(cbKRW);
-
+  document.getElementById('cb-cad2').textContent='≈ '+cad(cbCAD);
 
   // Cover type display
   setCoverType(S.coverType);
@@ -1162,13 +1564,38 @@ function renderAll(){
   document.getElementById('inf-acct').textContent=S.acct;
   document.getElementById('inf-name').textContent=S.name;
   document.getElementById('inf-product').textContent=S.product;
-  document.getElementById('inf-period').textContent=`1년 (${fmtD(S.startDate)} ~ ${fmtD(S.endDate)})`;
-  document.getElementById('inf-goal').textContent=S.goal;
-  document.getElementById('inf-monthly').textContent=S.monthly;
+
+  // 계약기간
+  const periodEl = document.getElementById('inf-period');
+  if(S.startDate && S.endDate){
+    periodEl.textContent = `${fmtD(S.startDate)} ~ ${fmtD(S.endDate)}`;
+    periodEl.style.color=''; periodEl.style.fontSize='';
+  } else {
+    periodEl.textContent = '자유롭게 설정하세요';
+    periodEl.style.color='#888'; periodEl.style.fontSize='12px';
+  }
+
+  // 만기목표
+  const goalEl = document.getElementById('inf-goal');
+  if(S.goal){
+    goalEl.textContent = S.goal;
+    goalEl.style.color=''; goalEl.style.fontSize='';
+  } else {
+    goalEl.textContent = '자유롭게 설정하세요';
+    goalEl.style.color='#888'; goalEl.style.fontSize='12px';
+  }
+
+  // 월납입액
+  const monthlyEl = document.getElementById('inf-monthly');
+  if(S.monthly){
+    monthlyEl.textContent = S.monthly;
+    monthlyEl.style.color=''; monthlyEl.style.fontSize='';
+  } else {
+    monthlyEl.textContent = '자유롭게 설정하세요';
+    monthlyEl.style.color='#888'; monthlyEl.style.fontSize='12px';
+  }
+
   document.getElementById('inf-bal').textContent=krw(k);
-
-  // 복원 배너 표시/숨김
-
 
   // TX grand total (also updated in renderTxTable)
   updateGrandTotal();
@@ -1184,9 +1611,11 @@ let txPage  = 1;
 /* ─── RENDER TX (main) ─── */
 function renderTx(){
   if(S.coverType==='b'){
+    // 📘 중보기도통장 → cbRecords 표시
     renderTxCb();
     return;
   }
+  // 📗 기도정기적금통장 → 연도/월탭 복원 후 S.records 표시
   const yw=document.getElementById('year-tabs-wrap');
   const mw=document.getElementById('month-chips-wrap');
   if(yw) yw.style.display='';
@@ -1321,7 +1750,7 @@ function renderTxTable(){
   document.getElementById('tf-mo-min').innerHTML =
     `${moMin.toLocaleString()} 분 <span class="tf-sub">(${label} 합계)</span>`;
   document.getElementById('tf-mo-krw').textContent = krw(moMin*S.rateKRW);
-
+  document.getElementById('tf-mo-cad').textContent = cad(moMin*S.rateCAD);
 
   updateGrandTotal();
 }
@@ -1339,9 +1768,9 @@ function updateGrandTotal(){
       runMin+=Number(r.min); // 전체
     }
   });
-  const runK=runMin*S.rateKRW;
+  const runK=runMin*S.rateKRW, runC=runMin*S.rateCAD;
   document.getElementById('tg-krw').textContent=krw(runK);
-
+  document.getElementById('tg-cad').textContent=cad(runC);
   document.getElementById('tg-min').textContent=runMin.toLocaleString()+' 분';
   // 전체 레이블 동적 변경
   const lbl=txMonth?parseInt(txMonth)+'월까지 누적':(txYear?txYear+'년까지 누적':'전체 누적');
@@ -1428,7 +1857,7 @@ function selChange(){
 document.getElementById('inp-min').addEventListener('input',function(){
   const m=parseInt(this.value)||0;
   const live=document.getElementById('prev-live');
-  if(live) live.textContent = m>0 ? '→ '+m+'분 기도 = '+krw(m*S.rateKRW) : '';
+  if(live) live.textContent = m>0 ? '→ '+m+'분 기도 = '+krw(m*S.rateKRW)+' / '+cad(m*S.rateCAD) : '';
 });
 
 /* ─── 백업 내보내기 ─── */
@@ -1440,7 +1869,7 @@ function exportData(silent){
       name: S.name, acct: S.acct, product: S.product,
       startDate: S.startDate, endDate: S.endDate,
       goal: S.goal, monthly: S.monthly,
-      rateKRW: S.rateKRW,
+      rateKRW: S.rateKRW, rateCAD: S.rateCAD,
       coverType: S.coverType
     },
     records: S.records,
@@ -1472,7 +1901,6 @@ function exportTxt(){
   lines.push('============================');
   lines.push('');
 
-  // 기도 기록
   if((S.records||[]).length){
     lines.push('[ 기도 기록 ]');
     const sorted = [...S.records].sort((a,b)=>a.date>b.date?1:-1);
@@ -1485,7 +1913,6 @@ function exportTxt(){
     lines.push('');
   }
 
-  // 성경 읽기 기록
   if((S.bibleRecords||[]).length){
     lines.push('[ 성경 읽기 기록 ]');
     const sorted = [...S.bibleRecords].sort((a,b)=>a.date>b.date?1:-1);
@@ -1498,7 +1925,6 @@ function exportTxt(){
     lines.push('');
   }
 
-  // 묵상 나눔
   if((S.muksung||[]).length){
     lines.push('[ 묵상 나눔 ]');
     const sorted = [...S.muksung].sort((a,b)=>a.date>b.date?1:-1);
@@ -1556,7 +1982,7 @@ function importData(e){
         S.goal      = backup.settings.goal      || S.goal;
         S.monthly   = backup.settings.monthly   || S.monthly;
         S.rateKRW   = backup.settings.rateKRW   || S.rateKRW;
-
+        S.rateCAD   = backup.settings.rateCAD   || S.rateCAD;
         S.coverType = backup.settings.coverType || S.coverType;
       }
       S.records = backup.records || [];
@@ -1590,7 +2016,7 @@ function openModal(){
   document.getElementById('m_goal').value=S.goal;
   document.getElementById('m_monthly').value=S.monthly;
   document.getElementById('m_rate').value=S.rateKRW;
-
+  document.getElementById('m_cad').value=S.rateCAD;
   document.getElementById('editModal').classList.add('open');
 }
 function closeModal(){document.getElementById('editModal').classList.remove('open')}
@@ -1603,7 +2029,7 @@ function saveModal(){
   S.goal=document.getElementById('m_goal').value||S.goal;
   S.monthly=document.getElementById('m_monthly').value||S.monthly;
   S.rateKRW=parseInt(document.getElementById('m_rate').value)||S.rateKRW;
-
+  S.rateCAD=parseFloat(document.getElementById('m_cad').value)||S.rateCAD;
   save();renderAll();closeModal();
   toast('✅ 통장 정보가 저장되었습니다');
 }
@@ -1913,7 +2339,7 @@ function renderCbInline(){
     foot.style.display='flex';
     document.getElementById('cb-inline-total').textContent =
       totalMin.toLocaleString()+'분 · '+krw(totalMin*S.rateKRW)
-      ;
+      +(typeof S.rateCAD!=='undefined'?' · '+cad(totalMin*S.rateCAD):'');
   }
 }
 
@@ -1924,170 +2350,6 @@ function delCbInline(i){
 
 
 
-/* ══════════════════════════════
-   ✨ 은혜 나눔
-══════════════════════════════ */
-function initShare(){
-  const d = document.getElementById('sh-date');
-  if(!d.value) d.value = today();
-  updateShareItems();
-}
-
-// 날짜 바뀔 때: 항목 정보만 업데이트 (체크는 건드리지 않음)
-function updateShareItems(){
-  const date = document.getElementById('sh-date').value;
-
-  // ── 성경 나눔 ──
-  const bibles   = (S.bibleRecords||[]).filter(r=>r.date===date);
-  const muksungs = (S.muksung||[]).filter(m=>m.date===date);
-  const bPrev = document.getElementById('sh-preview-bible');
-  const bItem = document.getElementById('sh-item-bible');
-  const bCb   = document.getElementById('sh-cb-bible');
-  if(bibles.length || muksungs.length){
-    let txt = '';
-    if(bibles.length)   txt += bibles.map(b=>b.book+(b.chap&&b.chap!=='-'?' '+b.chap:'')).join(', ');
-    if(muksungs.length) txt += (txt?' · ':'')+muksungs[0].content.slice(0,40)+(muksungs[0].content.length>40?'...':'');
-    bPrev.className='sci-preview'; bPrev.textContent=txt;
-    bItem.style.opacity='1';
-  } else {
-    bPrev.className='sci-empty'; bPrev.textContent='이 날짜에 성경 읽기 기록이 없어요';
-    bItem.style.opacity='.4'; bCb.checked=false;
-    bItem.classList.remove('checked');
-  }
-
-  // ── 오늘도 승리 ──
-  const victory = (S.victories||[]).find(v=>v.date===date);
-  const vPrev = document.getElementById('sh-preview-victory');
-  const vItem = document.getElementById('sh-item-victory');
-  const vCb   = document.getElementById('sh-cb-victory');
-  if(victory){
-    vPrev.className='sci-preview'; vPrev.textContent='화내지 않았고, 마음속으로 죄짓지 않고 오늘 하루를 이겨냈어요 🕊️';
-    vItem.style.opacity='1';
-  } else {
-    vPrev.className='sci-empty'; vPrev.textContent='이 날짜에 승리 기록이 없어요';
-    vItem.style.opacity='.4'; vCb.checked=false;
-    vItem.classList.remove('checked');
-  }
-
-  // ── 기도 시간 ──
-  const prayers  = (S.records||[]).filter(r=>r.date===date);
-  const pPrev = document.getElementById('sh-preview-prayer');
-  const pItem = document.getElementById('sh-item-prayer');
-  const pCb   = document.getElementById('sh-cb-prayer');
-  if(prayers.length){
-    const tot = prayers.reduce((s,r)=>s+Number(r.min),0);
-    pPrev.className='sci-preview'; pPrev.textContent='총 '+tot+'분  ·  '+krw(tot*S.rateKRW);
-    pItem.style.opacity='1';
-  } else {
-    pPrev.className='sci-empty'; pPrev.textContent='이 날짜에 기도 기록이 없어요';
-    pItem.style.opacity='.4'; pCb.checked=false;
-    pItem.classList.remove('checked');
-  }
-
-  buildSharePreview();
-}
-
-// 체크박스 토글
-function toggleShareItem(type){
-  const item = document.getElementById('sh-item-'+type);
-  const cb   = document.getElementById('sh-cb-'+type);
-  item.classList.toggle('checked', cb.checked);
-  buildSharePreview();
-}
-
-// 미리보기 텍스트 생성 (체크 상태만 읽음, 절대 초기화 안 함)
-function buildSharePreview(){
-  const date     = document.getElementById('sh-date').value;
-  const cbBible   = document.getElementById('sh-cb-bible').checked;
-  const cbVictory = document.getElementById('sh-cb-victory').checked;
-  const cbPrayer  = document.getElementById('sh-cb-prayer').checked;
-  const box = document.getElementById('sh-preview-box');
-
-  if(!cbBible && !cbVictory && !cbPrayer){
-    box.innerHTML='<span class="share-preview-empty">나눌 항목을 하나 이상 체크하세요 😊</span>';
-    return;
-  }
-
-  const dateStr = date ? fmtD(date) : fmtD(today());
-
-  // 연속 승리 계산
-  const sorted=[...(S.victories||[])].map(v=>v.date).sort().reverse();
-  let streak=0, chk=today();
-  for(let d of sorted){
-    if(d===chk){streak++;const dt=new Date(chk+'T00:00:00');dt.setDate(dt.getDate()-1);chk=dt.toISOString().slice(0,10);}
-    else break;
-  }
-
-  let lines=['✨ 은혜 나눔  '+dateStr,'─────────────────'];
-
-  if(cbBible){
-    const bibles   = (S.bibleRecords||[]).filter(r=>r.date===date);
-    const muksungs = (S.muksung||[]).filter(m=>m.date===date);
-    if(bibles.length){
-      lines.push('📖 오늘 읽은 말씀');
-      bibles.forEach(b=>lines.push('  '+b.book+(b.chap&&b.chap!=='-'?' '+b.chap:'')));
-    }
-    if(muksungs.length){
-      if(bibles.length) lines.push('');
-      lines.push('💜 묵상 나눔');
-      muksungs.forEach(m=>lines.push(m.content));
-    }
-    lines.push('─────────────────');
-  }
-
-  if(cbVictory){
-    lines.push('🏆 오늘도 승리!');
-    lines.push('화내지 않았고, 마음속으로 죄짓지 않고');
-    lines.push('오늘 하루를 이겨냈습니다 🕊️');
-    if(streak>1) lines.push('🔥 '+streak+'일째 연속 승리!');
-    lines.push('─────────────────');
-  }
-
-  if(cbPrayer){
-    const prayers=(S.records||[]).filter(r=>r.date===date);
-    const tot=prayers.reduce((s,r)=>s+Number(r.min),0);
-    lines.push('🙏 오늘 기도 시간: '+tot+'분');
-    lines.push('💰 영적 자산: '+krw(tot*S.rateKRW));
-    lines.push('─────────────────');
-  }
-
-  lines.push('"자기를 이기는 자는 용사보다 강하니라"');
-  lines.push('— 잠언 16:32');
-
-  box.textContent=lines.join(String.fromCharCode(10));
-}
-
-function copyShareText(){
-  const box  = document.getElementById('sh-preview-box');
-  const text = box.textContent.trim();
-  const isEmpty = !text || !!box.querySelector('.share-preview-empty');
-  if(isEmpty){ toast('나눌 항목을 먼저 선택해주세요 😊'); return; }
-
-  const btn = document.getElementById('sh-copy-btn');
-  const doSuccess = ()=>{
-    btn.classList.add('copied');
-    btn.innerHTML='<i class="fa fa-check"></i> 복사 완료! 카톡에 붙여넣기 하세요 🎉';
-    toast('✅ 복사됐어요! 카톡에 붙여넣기 하세요 💜');
-    setTimeout(()=>{
-      btn.classList.remove('copied');
-      btn.innerHTML='<i class="fa fa-copy"></i> 복사해서 카톡에 붙여넣기';
-    },3000);
-  };
-
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(text).then(doSuccess).catch(()=>{
-      fallbackCopy(text); doSuccess();
-    });
-  } else { fallbackCopy(text); doSuccess(); }
-}
-
-function fallbackCopy(text){
-  const ta=document.createElement('textarea');
-  ta.value=text; ta.style.cssText='position:fixed;opacity:0;top:0;left:0';
-  document.body.appendChild(ta); ta.focus(); ta.select();
-  try{ document.execCommand('copy'); }catch(e){}
-  document.body.removeChild(ta);
-}
 
 
 /* ─── 중보기도 거래내역 ─── */
@@ -2166,18 +2428,21 @@ function delCbTx(i){
 
 /* ─── INIT ─── */
 function safeSet(id, val){ const el=document.getElementById(id); if(el) el.value=val; }
+
+// 엔터키로 로그인
+document.getElementById('login-pw').addEventListener('keydown', function(e){
+  if(e.key==='Enter') doLogin();
+});
+document.getElementById('login-name').addEventListener('keydown', function(e){
+  if(e.key==='Enter') document.getElementById('login-pw').focus();
+});
+
 load();
 safeSet('inp-date', today());
 safeSet('b-date',   today());
 safeSet('m-date',   today());
-safeSet('sh-date',  today());
-renderAll();
-renderTx();
-renderBible();
-renderMuksung();
-renderVictory();
-setAcctType(S.acctType||'a');
-if((S.acctType||'a')==='b') renderCbInline();
+
+// 로그인 전에는 렌더링하지 않음 (로그인 후 loginSuccess에서 렌더링됨)
 
 // bibleEditModal 이벤트 (안전하게)
 const _bem = document.getElementById('bibleEditModal');
@@ -2256,6 +2521,10 @@ if(_bemBook){
       </button>
     </div>
   </div>
+</div>
+
+<div style="text-align:center; padding:18px 0 12px; color:#888; font-size:12px; letter-spacing:0.5px;">
+  기도마중물센터 본부 제공
 </div>
 
 </body>
